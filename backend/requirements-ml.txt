@@ -1,0 +1,8 @@
+# OCR + ML (Phase 5). Installed in the Docker image after requirements.txt.
+pytesseract==0.3.*
+opencv-python-headless==4.10.*
+scikit-learn==1.5.*
+imagehash==4.3.*
+pillow==10.4.*
+numpy<2
+joblib==1.4.*

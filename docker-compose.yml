@@ -1,0 +1,46 @@
+# Local dev: Postgres + MinIO (S3-compatible) + backend with mock auth. No AWS needed.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tripvault}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tripvault}
+      POSTGRES_DB: ${POSTGRES_DB:-tripvault}
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tripvault}"]
+      interval: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports: ["9000:9000", "9001:9001"]
+    volumes: [miniodata:/data]
+
+  backend:
+    build: ./backend
+    depends_on:
+      db: { condition: service_healthy }
+      minio: { condition: service_started }
+    environment:
+      APP_ENV: local
+      AUTH_MODE: mock                      # mock | cognito
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-tripvault}:${POSTGRES_PASSWORD:-tripvault}@db:5432/${POSTGRES_DB:-tripvault}
+      S3_BUCKET: ${S3_BUCKET:-tripvault-files}
+      S3_ENDPOINT_URL: http://minio:9000           # backend -> MinIO (inside docker network)
+      S3_PUBLIC_ENDPOINT_URL: http://localhost:9000 # used in pre-signed URLs the browser opens
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      AWS_REGION: ap-south-1
+      CORS_ORIGINS: http://localhost:3000
+      SEED_ON_START: "true"
+    ports: ["8000:8000"]
+
+volumes:
+  pgdata:
+  miniodata:

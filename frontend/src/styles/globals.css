@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+@tailwind base; @tailwind components; @tailwind utilities;
+
+/* RGB triplets so Tailwind opacity modifiers work. Source: DESIGN.md prose palette. */
+:root {
+  --canvas: 246 244 239;      /* #F6F4EF */
+  --surface: 255 255 255;     /* #FFFFFF */
+  --line: 228 223 211;        /* #E4DFD3 */
+  --stone: 235 229 216;       /* #EBE5D8 */
+  --stone-deep: 205 198 182;  /* #CDC6B6 */
+  --primary: 118 90 75;       /* #765A4B */
+  --primary-hover: 99 75 62;  /* #634B3E */
+  --espresso: 62 47 39;       /* #3E2F27 */
+  --accent: 53 96 110;        /* #35606E */
+  --muted: 123 113 103;       /* #7B7167 */
+  --success: 94 140 97;       /* #5E8C61 */
+  --warning: 201 139 58;      /* #C98B3A */
+  --danger: 181 72 62;        /* #B5483E */
+  --on-primary: 255 255 255;
+}
+[data-theme="dark"] {
+  --canvas: 30 24 20; --surface: 43 34 29; --line: 70 58 50; --stone: 52 42 36; --stone-deep: 88 75 66;
+  --primary: 201 166 144; --primary-hover: 216 184 164; --on-primary: 38 28 22; --espresso: 244 238 228;
+  --accent: 120 182 200; --muted: 176 164 152; --success: 125 177 128; --warning: 224 164 82; --danger: 222 112 100;
+}
+html { color-scheme: light; } html[data-theme="dark"] { color-scheme: dark; }
+.leaflet-container { font-family: inherit; border-radius: 1rem; }
+@keyframes pulse2 { 50% { opacity: .5; } }
+
+body { @apply bg-canvas text-espresso font-sans antialiased; }
+.tnum { font-variant-numeric: tabular-nums; }
