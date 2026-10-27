@@ -13,7 +13,7 @@ import { Button, Chip, EmptyState, ErrorBox, Modal, PageTitle, Select, Skeleton,
 
 const FOLDERS = Object.keys(FOLDER_META) as Folder[];
 const OK = ["image/jpeg", "image/png", "image/webp", "application/pdf", "application/vnd.apple.pkpass"];
-const guess = (n: string): Folder => /passport|visa|id\b/i.test(n) ? "Passport" : /flight|boarding|airline|sq\d/i.test(n) ? "Flights" : /hotel|booking|resort/i.test(n) ? "Hotels" : /ticket|pass|voucher/i.test(n) ? "Tickets" : "Other";
+const guess = (n: string): Folder => /passport|visa|id\b/i.test(n) ? "Passport" : /flight|boarding|airline|sq\d/i.test(n) ? "Flights" : /train|rail|irctc|amtrak|eurostar|shinkansen/i.test(n) ? "Trains" : /bus|coach|greyhound|megabus|redbus/i.test(n) ? "Buses" : /hotel|booking|resort/i.test(n) ? "Hotels" : /ticket|pass|voucher/i.test(n) ? "Tickets" : "Other";
 
 export default function Documents() {
   const { tripId, canEdit } = useTrip(); const { user } = useAuth(); const toast = useToast();

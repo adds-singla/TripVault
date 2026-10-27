@@ -10,7 +10,7 @@ export interface ItineraryItem {
   id: string; kind: "flight" | "stay" | "dinner" | "transit" | "activity"; title: string; location: string | null;
   starts_at: string; ends_at: string | null; confirmation_ref: string | null; notes: string | null;
 }
-export type Folder = "Flights" | "Hotels" | "Tickets" | "Passport" | "Other";
+export type Folder = "Flights" | "Trains" | "Buses" | "Hotels" | "Tickets" | "Passport" | "Other";
 export interface Doc { id: string; name: string; folder: Folder; size: number; content_type: string; created_at: string; uploader_id: string }
 export type Category = "Food" | "Transport" | "Accommodation" | "Activities" | "Shopping" | "Other";
 export interface Expense {

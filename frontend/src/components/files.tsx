@@ -1,12 +1,12 @@
 "use client";
 import { useRef, useState } from "react";
-import { Download, FileText, FolderOpen, Image as Img, Lock, MoreVertical, Plane, BedDouble, Ticket, Trash2, UploadCloud, ShieldCheck } from "lucide-react";
+import { Download, FileText, FolderOpen, Image as Img, Lock, MoreVertical, Plane, Train, Bus, BedDouble, Ticket, Trash2, UploadCloud, ShieldCheck } from "lucide-react";
 import { cn, fileSize, fmtDate } from "@/lib/format";
 import type { Doc, Folder } from "@/lib/types";
 import { Card, Chip } from "./ui";
 
 export const FOLDER_META: Record<Folder, { icon: typeof Plane; label: string }> = {
-  Flights: { icon: Plane, label: "Flights" }, Hotels: { icon: BedDouble, label: "Hotels & Stays" },
+  Flights: { icon: Plane, label: "Flights" }, Trains: { icon: Train, label: "Train Bookings" }, Buses: { icon: Bus, label: "Bus Bookings" }, Hotels: { icon: BedDouble, label: "Hotels & Stays" },
   Tickets: { icon: Ticket, label: "Tickets & Passes" }, Passport: { icon: ShieldCheck, label: "Passport & ID" },
   Other: { icon: FolderOpen, label: "Insurance & Other" },
 };
@@ -18,7 +18,7 @@ export function UploadDropzone({ onFiles, busy, accept = "image/*,application/pd
       onDrop={(e) => { e.preventDefault(); setOver(false); onFiles(Array.from(e.dataTransfer.files)); }}
       className={cn("rounded-card border-2 border-dashed px-6 py-10 text-center transition", over ? "border-primary bg-stone" : "border-stone-deep bg-stone/40")}>
       <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-surface text-primary shadow-l1"><UploadCloud /></span>
-      <p className="text-headline-sm">{busy ? "Uploading…" : "Drag flight tickets, hotel vouchers, or passport scans here"}</p>
+      <p className="text-headline-sm">{busy ? "Uploading…" : "Drag flight, train or bus tickets, hotel vouchers, or passport scans here"}</p>
       <p className="mt-1 text-body-md text-muted">or <button className="font-semibold text-accent underline" onClick={() => ref.current?.click()}>browse files</button> from your computer</p>
       <div className="mt-4 flex flex-wrap justify-center gap-2"><Chip>PDF</Chip><Chip>JPG / PNG</Chip><Chip>Apple Wallet .pkpass</Chip><span className="text-body-sm text-muted">{hint ?? "Up to 10 MB per file"}</span></div>
       <input ref={ref} type="file" multiple hidden accept={accept} onChange={(e) => { onFiles(Array.from(e.target.files ?? [])); e.target.value = ""; }} />
