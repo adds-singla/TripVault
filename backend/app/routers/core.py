@@ -99,3 +99,29 @@ def search(q: str, user: User = Depends(get_current_user), db: Session = Depends
     for d in db.scalars(select(Document).where(Document.trip_id.in_(ids), Document.name.ilike(like)).limit(8)).all():
         res.append({"type": "Document", "title": d.name, "subtitle": d.folder, "href": f"/trip/documents/?id={d.trip_id}"})
     return res
+
+
+# ── Local-disk upload / download (dev only, no S3/MinIO needed) ───────────────
+from fastapi import Request, Response
+from fastapi.responses import FileResponse
+from pathlib import Path
+from app import storage as _storage
+
+
+@router.put("/local-upload", tags=["dev"], include_in_schema=False)
+async def local_upload(token: str, request: Request) -> dict:
+    """Receives the raw file bytes the browser PUT to the fake presigned URL."""
+    data = await request.body()
+    try:
+        _storage.save_local_upload(token, data)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    return {"ok": True}
+
+
+@router.get("/local-download", tags=["dev"], include_in_schema=False)
+def local_download(key: str) -> Response:
+    p = _storage.LOCAL_ROOT / key
+    if not p.exists():
+        raise HTTPException(404, "File not found")
+    return FileResponse(str(p))
