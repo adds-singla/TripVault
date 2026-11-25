@@ -27,8 +27,11 @@ export default function Login() {
     } catch (e) { setErr((e as Error).message || "Something went wrong"); } finally { setBusy(false); }
   }
   async function google() {
-    if (AUTH_MODE === "mock") { try { await login("elena.vance@tripvault.io", ""); } catch (e) { setErr((e as Error).message); } }
-    else toast("Google sign-in needs the Cognito hosted UI + Google IdP (see README, AWS step)", "error");
+    if (AUTH_MODE === "mock") { try { await login("elena.vance@tripvault.io", ""); } catch (e) { setErr((e as Error).message); } return; }
+    const domain = "tripvault-auth.auth.ap-southeast-2.amazoncognito.com";
+    const clientId = process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID || "";
+    const redirect = `${window.location.origin}/auth/callback`;
+    window.location.href = `https://${domain}/oauth2/authorize?identity_provider=Google&redirect_uri=${encodeURIComponent(redirect)}&response_type=token&client_id=${clientId}&scope=openid+email+profile`;
   }
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
